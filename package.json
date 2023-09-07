@@ -1,0 +1,25 @@
+{
+  "name": "carbynestack-extension-js",
+  "version": "1.0.0",
+  "description": "Package for communication between web app and chrome extension built for Carbyne Stack developers",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbarisozkal/carbynestack-extension-js.git"
+  },
+  "keywords": [
+    "carbynestack",
+    "bi-directional",
+    "communication",
+    "chrome extension"
+  ],
+  "author": "Renas Baris Ozkal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbarisozkal/carbynestack-extension-js/issues"
+  },
+  "homepage": "https://github.com/rbarisozkal/carbynestack-extension-js#readme"
+}
