@@ -1,6 +1,6 @@
 {
   "name": "carbynestack-extension-js",
-  "version": "1.0.2",
+  "version": "1.0.12",
   "description": "Package for communication between web app and chrome extension built for Carbyne Stack developers",
   "main": "index.js",
   "scripts": {

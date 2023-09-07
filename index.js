@@ -1,7 +1,6 @@
 // Import any dependencies you need
 // For example, you might use the chrome.runtime API for Chrome extension communication
 // const chrome = require('chrome');
-
 // Define a function to send a message from the web app to the Chrome extension
 function sendMessageToExtension(message, crxId) {
   // Use the chrome.runtime.sendMessage method to send a message to the extension
@@ -63,32 +62,23 @@ function onMessageExternal() {
     }
   );
 }
-// Define a function to receive messages from the Chrome extension in the web app
-function listenForExtensionMessages(callback) {
-  // Use chrome.runtime.onMessage.addListener to listen for messages from the extension
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // Check if the message is from the extension
-    if (message.fromExtension) {
-      // Handle the received message
-      console.log("Message received from extension:", message.message);
-      // You can pass the message to a callback for further processing
-      callback(message);
-    }
-  });
-}
-function getDataFromLocalStorage(data) {
-  chrome.storage.local.get([data], (result) => {
+
+// In your library
+function getDataFromLocalStorage(callback) {
+  chrome.storage.local.get(["data"], (result) => {
     const data = result.data;
     console.log(data, "data get from local storage");
+    callback(data);
     if (data) {
       console.log(data);
+      callback(data);
+    } else {
     }
   });
 }
+
 async function sendDataToWebApp(url, carbynestackData) {
-  const data = {
-    ...carbynestackData,
-  };
+  const data = carbynestackData;
   // Send a message to the content script of a specific tab
   chrome.tabs.query({ url: url }, (tabs) => {
     tabs.forEach((tab) => {
@@ -113,7 +103,6 @@ async function sendDataToWebApp(url, carbynestackData) {
 // Export the functions or classes you've defined
 module.exports = {
   sendMessageToExtension,
-  listenForExtensionMessages,
   getDataFromLocalStorage,
   sendDataToWebApp,
   onMessageExternal,
