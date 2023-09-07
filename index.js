@@ -18,6 +18,51 @@ function sendMessageToExtension(message, crxId) {
     }
   );
 }
+function onMessageExternal() {
+  chrome.runtime.onMessageExternal.addListener(
+    (request, sender, sendResponse) => {
+      console.log("request", request);
+      console.log("sender", sender);
+      switch (request.type) {
+        case "data":
+          chrome.runtime.openOptionsPage(() => {
+            chrome.storage.local.set({ data: request.data }, () => {
+              console.log("Data stored and options page opened.");
+            });
+          });
+          // @ts-ignore
+          let url = new URL(
+            chrome.runtime.getURL("src/popup/index.html?message=form")
+          );
+          let width = 320;
+          let height = 500;
+
+          // @ts-ignore
+          chrome.windows.getCurrent((win) => {
+            // @ts-ignore
+            chrome.windows.create({
+              url: url.href,
+              type: "popup",
+              focused: true,
+              width: width,
+              height: height,
+              // positioned top-right
+              top: win.top + 75,
+              left: win.left + win.width - width,
+            });
+          });
+
+          break;
+        case "get_secret":
+          console.log("get_secret");
+          break;
+        default:
+          console.log("undefined type");
+          break;
+      }
+    }
+  );
+}
 // Define a function to receive messages from the Chrome extension in the web app
 function listenForExtensionMessages(callback) {
   // Use chrome.runtime.onMessage.addListener to listen for messages from the extension
@@ -71,4 +116,5 @@ module.exports = {
   listenForExtensionMessages,
   getDataFromLocalStorage,
   sendDataToWebApp,
+  onMessageExternal,
 };
