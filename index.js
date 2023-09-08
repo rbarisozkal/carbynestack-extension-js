@@ -79,9 +79,12 @@ function getDataFromLocalStorage(callback) {
 
 async function sendDataToWebApp(url, carbynestackData) {
   const data = carbynestackData;
+  console.log(data, "data send to web app");
   // Send a message to the content script of a specific tab
   chrome.tabs.query({ url: url }, (tabs) => {
     tabs.forEach((tab) => {
+      console.log(tab);
+
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         function: (data) => {
