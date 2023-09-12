@@ -1,11 +1,12 @@
 // Import any dependencies you need
 // For example, you might use the chrome.runtime API for Chrome extension communication
-// const chrome = require('chrome');
+
 // Define a function to send a message from the web app to the Chrome extension
-function sendMessageToExtension(message, crxId) {
+//@ts-nocheck
+function sendMessageToExtension(message: any, crxId: string) {
   // Use the chrome.runtime.sendMessage method to send a message to the extension
   // You can customize this based on your extension's needs
-  let data = { ...message };
+  const data = { ...message };
   chrome.runtime.sendMessage(
     crxId,
     {
@@ -17,7 +18,8 @@ function sendMessageToExtension(message, crxId) {
     }
   );
 }
-function onMessageExternal() {
+//popup directory example : "src/popup/index.html?message=form"
+function onMessageExternal(popupDirectory: string) {
   chrome.runtime.onMessageExternal.addListener(
     (request, sender, sendResponse) => {
       console.log("request", request);
@@ -29,24 +31,21 @@ function onMessageExternal() {
               console.log("Data stored and options page opened.");
             });
           });
-          // @ts-ignore
-          let url = new URL(
-            chrome.runtime.getURL("src/popup/index.html?message=form")
-          );
-          let width = 320;
-          let height = 500;
 
-          // @ts-ignore
+          const url = new URL(
+            chrome.runtime.getURL(popupDirectory)
+          );
+          const width = 320;
+          const height = 500;
+
           chrome.windows.getCurrent((win) => {
-            // @ts-ignore
             chrome.windows.create({
               url: url.href,
               type: "popup",
               focused: true,
               width: width,
               height: height,
-              // positioned top-right
-              top: win.top + 75,
+              top: win.top + 75, // positioned top-right
               left: win.left + win.width - width,
             });
           });
@@ -64,20 +63,15 @@ function onMessageExternal() {
 }
 
 // In your library
-function getDataFromLocalStorage(callback) {
+function getDataFromLocalStorage(callback: (data: any) => void) {
   chrome.storage.local.get(["data"], (result) => {
     const data = result.data;
     console.log(data, "data get from local storage");
     callback(data);
-    if (data) {
-      console.log(data);
-      callback(data);
-    } else {
-    }
   });
 }
 
-async function sendDataToWebApp(url, carbynestackData) {
+async function sendDataToWebApp(url: string, carbynestackData: any) {
   const data = carbynestackData;
   console.log(data, "data send to web app");
   // Send a message to the content script of a specific tab
@@ -104,7 +98,7 @@ async function sendDataToWebApp(url, carbynestackData) {
 }
 
 // Export the functions or classes you've defined
-module.exports = {
+export {
   sendMessageToExtension,
   getDataFromLocalStorage,
   sendDataToWebApp,
